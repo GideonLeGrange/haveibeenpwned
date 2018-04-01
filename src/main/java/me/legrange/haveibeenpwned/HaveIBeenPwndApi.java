@@ -75,7 +75,7 @@ public final class HaveIBeenPwndApi {
      * return a list of all breaches a particular account has been involved in.
      * The API takes a single parameter which is the account to be searched for
      *
-     * @param account
+     * @param account The account to check for breach
      * @return The breaches for the account
      * @throws me.legrange.haveibeenpwned.HaveIBeenPwndException Thrown if there
      * is an error.
@@ -149,7 +149,7 @@ public final class HaveIBeenPwndApi {
      * https://haveibeenpwned.com/API/v2
      *
      * @param hash5 The first 5 digits of the sha1 hash
-     * @return
+     * @return The list of hashes partially matching the given hash 
      * @throws HaveIBeenPwndException Thrown if an error occurs
      */
     public List<PwnedHash> searchByRange(String hash5) throws HaveIBeenPwndException {
