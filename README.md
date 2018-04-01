@@ -25,17 +25,17 @@ You can also download the pre-built jar file, or a zip or tar.gz file with the s
 
 # Using the API
 
-The purpose of the API see if an account (email address) or password has been listed as compromised on [';--have i been pwned?](https://haveibeenpwned.com). 
+The purpose of the API see if an account (email address) or password has been listed as compromised on [';--have i been pwned?](https://haveibeenpwned.com)
 To use the API you need to instantiate an instance of it, and then call one of the methods. I can't be simpler:
 
 ```java
-        HaveIBeenPwndApi hibp = new HaveIBeenPwndApi();
+HaveIBeenPwndApi hibp = new HaveIBeenPwndApi();
 ```
 
 A slightly better way is to use the constructor that allows you to set the user-agent sent to the remote API to identify your application:
 
-```
-        HaveIBeenPwndApi hibp = new HaveIBeenPwndApi("My-Pwnage-Testing-App");
+```java
+HaveIBeenPwndApi hibp = new HaveIBeenPwndApi("My-Pwnage-Testing-App");
 ```
 
 In the following examples we assume the API has been instantiated and is called ```hibp```. 
@@ -45,15 +45,15 @@ In the following examples we assume the API has been instantiated and is called 
 To test if an account appears in breached data, do this:
 
 ```java
-   boolean pwned = hibp.isAccountPwned("youremail@goes.here");
-   System.out.printf("That email account %s pwned!\n", (pwned ? "is" : "isn't"));
+boolean pwned = hibp.isAccountPwned("youremail@goes.here");
+System.out.printf("That email account %s pwned!\n", (pwned ? "is" : "isn't"));
 ```
 
 To test if a password appears in breached data, try this:
 
 ```java 
-        boolean pwned = hibp.isPlainPasswordPwned("123456");
-        System.out.printf("That silly password %s pwned!\n", (pwned ? "is" : "isn't"));
+boolean pwned = hibp.isPlainPasswordPwned("123456");
+System.out.printf("That silly password %s pwned!\n", (pwned ? "is" : "isn't"));
 ```
 
 Note that, even though the password is supplied in plain text, it is not transmitted to the remote API. The
@@ -65,9 +65,9 @@ Even this is encrypted in transmission.
 You can retrieve detailed information on breaches by calling ```getAllBreachesForAccount()```. For example:
 
 ```java 
-        List<Breach> breaches = hibp.getAllBreachesForAccount("youremail@goes.here");
-        System.out.printf("You've been breached %d times\n", breaches.size());
-        breaches.forEach(System.out::println);
+List<Breach> breaches = hibp.getAllBreachesForAccount("youremail@goes.here");
+System.out.printf("You've been breached %d times\n", breaches.size());
+breaches.forEach(System.out::println);
 ```
 
 There is an overloaded version of ```getAllBreachesForAccount``` that allows for further fine tuning of results. Refer to the
