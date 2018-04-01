@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,7 +35,7 @@ public final class HaveIBeenPwndApi {
     private static final String DEFAULT_USER_AGENT = "HaveIBeenPwndJava-v1";
 
     /**
-     * Create a new instance of the API with the default user agent 
+     * Create a new instance of the API with the default user agent
      */
     public HaveIBeenPwndApi() {
         this(DEFAULT_USER_AGENT);
@@ -97,13 +98,7 @@ public final class HaveIBeenPwndApi {
      * @throws HaveIBeenPwndException Thrown if there is an error.
      */
     public List<Breach> getAllBreachesForAccount(String account, String domain, boolean truncateResponse, boolean includeUnveridied) throws HaveIBeenPwndException {
-        Call<List<Breach>> call = hibpService.getAllBreachesForAccount(account, includeUnveridied, truncateResponse, domain);
-        try {
-            Response<List<Breach>> res = call.execute();
-            return res.body();
-        } catch (IOException ex) {
-            throw new HaveIBeenPwndException(ex.getMessage(), ex);
-        }
+        return callService(hibpService.getAllBreachesForAccount(account, includeUnveridied, truncateResponse, domain)).orElse(Collections.EMPTY_LIST);
     }
 
     /**
@@ -132,12 +127,7 @@ public final class HaveIBeenPwndApi {
      * @throws HaveIBeenPwndException Thrown if there is an error
      */
     public List<String> getAllDataClasses() throws HaveIBeenPwndException {
-        Call<List<String>> call = hibpService.getDataClasses();
-        try {
-            return call.execute().body();
-        } catch (IOException ex) {
-            throw new HaveIBeenPwndException(ex.getMessage(), ex);
-        }
+        return callService(hibpService.getDataClasses()).orElse(Collections.EMPTY_LIST);
     }
 
     /**
@@ -147,56 +137,71 @@ public final class HaveIBeenPwndApi {
      *
      * @param account The account for which to get the pastes.
      * @return The pastes
-     * @throws HaveIBeenPwndException Thrown if an error occurs, including if
-     * the account has not been pwned
+     * @throws HaveIBeenPwndException Thrown if an error occurs
      */
     public List<Paste> getAllPastesForAccount(String account) throws HaveIBeenPwndException {
-        return callService(hibpService.getAllPastesForAccount(account));
+        return callService(hibpService.getAllPastesForAccount(account)).orElse(Collections.EMPTY_LIST);
     }
 
     /**
-     * Search pwned passwords for the given password. To understand how to use this, 
-     * read the 'Searching by range' section in https://haveibeenpwned.com/API/v2
+     * Search pwned passwords for the given password. To understand how to use
+     * this, read the 'Searching by range' section in
+     * https://haveibeenpwned.com/API/v2
      *
      * @param hash5 The first 5 digits of the sha1 hash
      * @return
-     * @throws HaveIBeenPwndException
+     * @throws HaveIBeenPwndException Thrown if an error occurs
      */
     public List<PwnedHash> searchByRange(String hash5) throws HaveIBeenPwndException {
-        String res = callService(ppwService.searchByRange(hash5));
-        Stream<String> lines = Arrays.asList(res.split("\n")).stream();
-        return lines.map(line -> line.replace("\r","").split(":"))
-                .map(parts -> new PwnedHash(parts[0], Integer.parseInt(parts[1])))
-                .collect(Collectors.toList());
+        String res = callService(ppwService.searchByRange(hash5)).orElse("");
+        if (!res.isEmpty()) {
+            Stream<String> lines = Arrays.asList(res.split("\n")).stream();
+            return lines.map(line -> line.replace("\r", "").split(":"))
+                    .map(parts -> new PwnedHash(parts[0], Integer.parseInt(parts[1])))
+                    .collect(Collectors.toList());
+        }
+        return Collections.EMPTY_LIST;
     }
     
-    /** Check if a supplied password is pwned. 
+    
+    /** Check if a supplied account is pwned. 
      * 
-     * Note that the password is not sent via the network. It is hashed using SHA1, and
-     * only the first 5 characters of the hash is sent. Then the hash is compared against
-     * the received possibly matching hashes. 
-     * 
+     * @param account The account to check
+     * @return True if the account has been pwned.
+     * @throws HaveIBeenPwndException Thrown if an error occurs
+     */
+    public boolean isAccountPwned(String account) throws HaveIBeenPwndException {
+        return !getAllBreachesForAccount(account).isEmpty();
+    }
+
+    /**
+     * Check if a supplied password is pwned.
+     *
+     * Note that the password is not sent via the network. It is hashed using
+     * SHA1, and only the first 5 characters of the hash is sent. Then the hash
+     * is compared against the received possibly matching hashes.
+     *
      * @param password The password to test
      * @return True if it is pwend
-     * @throws HaveIBeenPwndException Thrown if something goes wrong. 
+     * @throws HaveIBeenPwndException Thrown if something goes wrong.
      */
-    public boolean isPlainPasswordPwned(String password) throws HaveIBeenPwndException  {
+    public boolean isPlainPasswordPwned(String password) throws HaveIBeenPwndException {
         return isHashPasswordPwned(makeHash(password));
     }
-    
-    /** Check if a supplied hashed password is pwned. 
-     * 
-     * @param pwHash The password to test, encoded as a SHA1 hash. 
+
+    /**
+     * Check if a supplied hashed password is pwned.
+     *
+     * @param pwHash The password to test, encoded as a SHA1 hash.
      * @return True if it is pwend
-     * @throws HaveIBeenPwndException Thrown if something goes wrong. 
+     * @throws HaveIBeenPwndException Thrown if something goes wrong.
      */
     public boolean isHashPasswordPwned(String pwHash) throws HaveIBeenPwndException {
         String hash5 = pwHash.substring(0, 5);
-        List<PwnedHash> hashes = searchByRange(hash5); 
+        List<PwnedHash> hashes = searchByRange(hash5);
         return hashes.stream().anyMatch(hash -> (hash5 + hash.getHash()).equals(pwHash));
     }
-    
-     
+
     /**
      * Make a SHA1 hash for sending to the Pwned Passwords API.
      *
@@ -215,30 +220,27 @@ public final class HaveIBeenPwndApi {
      * @return The result
      * @throws HaveIBeenPwndException Thrown if an error occurs
      */
-    private <T> T callService(Call<T> call) throws HaveIBeenPwndException {
+    private <T> Optional<T> callService(Call<T> call) throws HaveIBeenPwndException {
         try {
             Response<T> res = call.execute();
-            if (res.isSuccessful()) {
-                return res.body();
-            } else {
+            if (!res.isSuccessful()) {
                 switch (res.code()) {
                     case 400:
                         throw new HaveIBeenPwndException("Bad request — the account does not comply with an acceptable format (i.e. it's an empty string)");
                     case 403:
                         throw new HaveIBeenPwndException("Forbidden — no user agent has been specified in the request");
                     case 404:
-                        throw new HaveIBeenPwndException("Not found — the account could not be found and has therefore not been pwned");
+                        break;
                     case 429:
                         throw new HaveIBeenPwndException("Too many requests — the rate limit has been exceeded");
                     default:
                         throw new HaveIBeenPwndException("Unknown error code " + res.code());
                 }
             }
+            return Optional.ofNullable(res.body());
         } catch (IOException ex) {
             throw new HaveIBeenPwndException(ex.getMessage(), ex);
         }
     }
-
-
 
 }
