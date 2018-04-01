@@ -7,7 +7,7 @@ This API provides an easy way of accessing the account and password verification
 
 [![Build Status](https://travis-ci.org/GideonLeGrange/haveibeenpwned.svg?branch=master)](https://travis-ci.org/GideonLeGrange/haveibeenpwned)
 
-**The current version is 1.0-SNAPSHOT and is pre-release. 1.0 will be out shortly**
+**The current version is 1.0**
 
 # Getting the API
 
