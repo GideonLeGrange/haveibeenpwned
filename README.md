@@ -3,13 +3,13 @@ A Java API for the account and password services provided by [';--have i been pw
 
 This API provides an easy way of accessing the account and password verification services for https://haveibeenpwned.com. The user can check if accounts appear in any of the compromise datasets or if a password is known to be compromised. 
 
-## Versions
+# Versions
 
 [![Build Status](https://travis-ci.org/GideonLeGrange/haveibeenpwned.svg?branch=master)](https://travis-ci.org/GideonLeGrange/haveibeenpwned)
 
 **The current version is 1.0-SNAPSHOT and is pre-release. 1.0 will be out shortly**
 
-## Getting the API
+# Getting the API
 
 Maven users can use the artifact from Maven Central with this dependency:
 
