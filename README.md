@@ -85,4 +85,4 @@ can be obtained by calling ```searchByRange()``` Refer to the source code and ';
 
 # Licence
 
-This library is released under the Apache 2.0 licence. See the [LICENCE.md](LICENCE.md) file
+This library is released under the Apache 2.0 licence. See the [LICENCE](LICENCE) file
