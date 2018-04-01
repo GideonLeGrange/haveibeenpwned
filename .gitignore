@@ -1,0 +1,54 @@
+# Java
+*.class
+*.jar
+*.war
+*.ear
+
+# Scala
+*.class
+*.log
+# sbt specific
+dist/*
+target/
+lib_managed/
+src_managed/
+project/boot/
+project/plugins/project/
+# Scala-IDE specific
+.scala_dependencies
+
+# Maven 
+target/
+
+# Netbeans
+build/
+dist/
+#nbproject/
+nb-configuration.xml
+nbactions.xml
+
+# IntelliJ
+.idea/
+*.iml
+
+# Eclipse
+.settings/
+
+
+# Jekyll 
+_site/
+
+# bot directory poluted by database 
+
+README_DO_NOT_TOUCH_FILES.txt
+#bot/
+db.lck
+dbex.lck
+log/
+seg0/
+service.properties
+
+.DS_Store
+
+# KML ggenerated
+gen/
