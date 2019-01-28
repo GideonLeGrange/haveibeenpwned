@@ -7,7 +7,11 @@ This API provides an easy way of accessing the account and password verification
 
 [![Build Status](https://travis-ci.org/GideonLeGrange/haveibeenpwned.svg?branch=master)](https://travis-ci.org/GideonLeGrange/haveibeenpwned)
 
-**The current version is 1.0**
+**The current version is 1.1**
+
+There's not much difference between 1.0 and 1.1, apart from:
+* Dependencies have been updated to address security concerns reported in `retrofit` prior to version 2.5
+* In version 1.1 you can sub-class the `HaveIBeenPwndApi` class if you wish 
 
 # Getting the API
 
@@ -17,7 +21,7 @@ Maven users can use the artifact from Maven Central with this dependency:
 <dependency>
   <groupId>me.legrange</groupId>
   <artifactId>haveibeenpwned</artifactId>
-  <version>1.0</version>
+  <version>1.1</version>
 </dependency>
 ```
 
