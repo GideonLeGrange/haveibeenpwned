@@ -26,7 +26,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
  *
  * @author GideonLeGrange
  */
-public final class HaveIBeenPwndApi {
+public class HaveIBeenPwndApi {
 
     private final HaveIBeenPwndService hibpService;
     private final PwnedPasswordsService ppwService;
