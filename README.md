@@ -7,12 +7,17 @@ This API provides an easy way of accessing the account and password verification
 
 [![Build Status](https://travis-ci.org/GideonLeGrange/haveibeenpwned.svg?branch=master)](https://travis-ci.org/GideonLeGrange/haveibeenpwned)
 
-**The current version is 1.1**
+**The current version is 2.0**
 
-There's not much difference between 1.0 and 1.1, apart from:
-* Dependencies have been updated to address security concerns reported in `retrofit` prior to version 2.5
-* In version 1.1 you can sub-class the `HaveIBeenPwndApi` class if you wish 
-
+Version 2.0 brings the following changes: 
+* The API supports padding for pwnd passwords (see https://www.troyhunt.com/enhancing-pwned-passwords-privacy-with-padding/)
+* A builder pattern is added in place of the constructor to allow for configuration of the following:
+  * The User-Agent (was configured as part of the constructor)
+  * If padding (as per above) should be added 
+  * The URL to use for pwnd passwords (advanced feature, don't use)
+  * The URL to use for breach data (advanced feature, don't use)
+* The builder pattern must be used 
+  
 # Getting the API
 
 Maven users can use the artifact from Maven Central with this dependency:
@@ -21,7 +26,7 @@ Maven users can use the artifact from Maven Central with this dependency:
 <dependency>
   <groupId>me.legrange</groupId>
   <artifactId>haveibeenpwned</artifactId>
-  <version>1.1</version>
+  <version>2.0</version>
 </dependency>
 ```
 
@@ -33,14 +38,21 @@ The purpose of the API see if an account (email address) or password has been li
 To use the API you need to instantiate an instance of it, and then call one of the methods. I can't be simpler:
 
 ```java
-HaveIBeenPwndApi hibp = new HaveIBeenPwndApi();
+HaveIBeenPwndApi hibp = HaveIBeenPwndBuilder().create().build();
 ```
 
-A slightly better way is to use the constructor that allows you to set the user-agent sent to the remote API to identify your application:
+But if you wish to configure the API, `HaveIBeenPwnedBuilder` allows you to set if you wish to add padding to pwnd password checks [see this blog for details](https://www.troyhunt.com/enhancing-pwned-passwords-privacy-with-padding/),
+what user-agent to use, and it even allows you to change the pwnd password and breach URLs to use (for testing, don't do this).
+
+For example, here we enable padding and set the user-agent:
 
 ```java
-HaveIBeenPwndApi hibp = new HaveIBeenPwndApi("My-Pwnage-Testing-App");
+        HaveIBeenPwndApi hibp = HaveIBeenPwndBuilder.create()
+                .addPadding(true)
+                .withUserAgent("Pwn-Checker-1.0")
+                .build();
 ```
+
 
 In the following examples we assume the API has been instantiated and is called ```hibp```. 
 

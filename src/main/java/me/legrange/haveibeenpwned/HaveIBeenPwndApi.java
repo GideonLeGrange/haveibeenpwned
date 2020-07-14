@@ -30,23 +30,12 @@ public class HaveIBeenPwndApi {
 
     private final HaveIBeenPwndService hibpService;
     private final PwnedPasswordsService ppwService;
-    private static final String HIBP_REST_URL = "https://haveibeenpwned.com/api/v2/";
-    private static final String PPW_REST_URL = "https://api.pwnedpasswords.com/";
-    private static final String DEFAULT_USER_AGENT = "HaveIBeenPwndJava-v1";
-
-    /**
-     * Create a new instance of the API with the default user agent
-     */
-    public HaveIBeenPwndApi() {
-        this(DEFAULT_USER_AGENT);
-    }
+    private final boolean addPadding;
 
     /**
      * Create a new instance of the API with the given user agent.
-     *
-     * @param userAgent The useragent to use.
      */
-    public HaveIBeenPwndApi(String userAgent) {
+     HaveIBeenPwndApi(String hibpUrl, String ppwUrl, boolean addPadding, String userAgent) {
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(chain -> {
             Request request = chain.request().newBuilder().addHeader("User-Agent", userAgent).build();
             return chain.proceed(request);
@@ -56,18 +45,19 @@ public class HaveIBeenPwndApi {
                 .create();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(HIBP_REST_URL)
+                .baseUrl(hibpUrl)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(client)
                 .build();
 
         hibpService = retrofit.create(HaveIBeenPwndService.class);
         retrofit = new Retrofit.Builder()
-                .baseUrl(PPW_REST_URL)
+                .baseUrl(ppwUrl)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .client(client)
                 .build();
         ppwService = retrofit.create(PwnedPasswordsService.class);
+        this.addPadding = addPadding;
     }
 
     /**
@@ -153,7 +143,7 @@ public class HaveIBeenPwndApi {
      * @throws HaveIBeenPwndException Thrown if an error occurs
      */
     public List<PwnedHash> searchByRange(String hash5) throws HaveIBeenPwndException {
-        String res = callService(ppwService.searchByRange(hash5)).orElse("");
+        String res = callService(ppwService.searchByRange(hash5, addPadding)).orElse("");
         if (!res.isEmpty()) {
             Stream<String> lines = Arrays.asList(res.split("\n")).stream();
             return lines.map(line -> line.replace("\r", "").split(":"))
@@ -198,7 +188,9 @@ public class HaveIBeenPwndApi {
      */
     public boolean isHashPasswordPwned(String pwHash) throws HaveIBeenPwndException {
         String hash5 = pwHash.substring(0, 5);
-        List<PwnedHash> hashes = searchByRange(hash5);
+        List<PwnedHash> hashes = searchByRange(hash5).stream()
+                .filter(hash -> hash.getCount() > 0)
+                .collect(Collectors.toList());
         return hashes.stream().anyMatch(hash -> (hash5 + hash.getHash()).equals(pwHash));
     }
 
