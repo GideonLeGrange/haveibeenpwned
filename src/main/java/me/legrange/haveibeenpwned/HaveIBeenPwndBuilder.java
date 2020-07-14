@@ -6,11 +6,12 @@ package me.legrange.haveibeenpwned;
  */
 public final class HaveIBeenPwndBuilder {
 
-    private static final String HIBP_REST_URL = "https://haveibeenpwned.com/api/v2/";
+    private static final String HIBP_REST_URL = "https://haveibeenpwned.com/api/v3/";
     private static final String PPW_REST_URL = "https://api.pwnedpasswords.com/";
     private static final String DEFAULT_USER_AGENT = "HaveIBeenPwndJava-v1";
 
     private boolean addPadding = false;
+    private String apiKey = "";
     private String haveIbeenPwndUrl  = HIBP_REST_URL;
     private String pwndPasswordsUrl = PPW_REST_URL;
     private String userAgent = DEFAULT_USER_AGENT;
@@ -19,8 +20,15 @@ public final class HaveIBeenPwndBuilder {
      *
      * @return The builder
      */
-    public static HaveIBeenPwndBuilder create() {
-        return new HaveIBeenPwndBuilder();
+    public static HaveIBeenPwndBuilder create(String userAgent) {
+        HaveIBeenPwndBuilder builder = new HaveIBeenPwndBuilder();
+        builder.userAgent = userAgent;
+        return builder;
+    }
+
+    public HaveIBeenPwndBuilder withApiKey(String apiKey) {
+        this.apiKey = apiKey;
+        return this;
     }
 
     /** Change the URL for the HaveIBeenPwnd breach service.
@@ -68,7 +76,7 @@ public final class HaveIBeenPwndBuilder {
      * @return The API
      */
     public HaveIBeenPwndApi build() {
-        return new HaveIBeenPwndApi(haveIbeenPwndUrl, pwndPasswordsUrl, addPadding, userAgent);
+        return new HaveIBeenPwndApi(haveIbeenPwndUrl, pwndPasswordsUrl, addPadding, userAgent, apiKey);
     }
 
     private HaveIBeenPwndBuilder() {

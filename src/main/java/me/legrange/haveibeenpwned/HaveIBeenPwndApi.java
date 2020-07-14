@@ -2,6 +2,7 @@ package me.legrange.haveibeenpwned;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -20,7 +22,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /**
  * API to access https://haveibeenpwned.com/.
- *
+ * <p>
  * This API implements the specification found here:
  * https://haveibeenpwned.com/API/v2
  *
@@ -28,6 +30,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
  */
 public class HaveIBeenPwndApi {
 
+    private final String apiKey;
     private final HaveIBeenPwndService hibpService;
     private final PwnedPasswordsService ppwService;
     private final boolean addPadding;
@@ -35,7 +38,7 @@ public class HaveIBeenPwndApi {
     /**
      * Create a new instance of the API with the given user agent.
      */
-     HaveIBeenPwndApi(String hibpUrl, String ppwUrl, boolean addPadding, String userAgent) {
+    HaveIBeenPwndApi(String hibpUrl, String ppwUrl, boolean addPadding, String userAgent, String apiKey) {
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(chain -> {
             Request request = chain.request().newBuilder().addHeader("User-Agent", userAgent).build();
             return chain.proceed(request);
@@ -58,6 +61,7 @@ public class HaveIBeenPwndApi {
                 .build();
         ppwService = retrofit.create(PwnedPasswordsService.class);
         this.addPadding = addPadding;
+        this.apiKey = apiKey;
     }
 
     /**
@@ -68,7 +72,7 @@ public class HaveIBeenPwndApi {
      * @param account The account to check for breach
      * @return The breaches for the account
      * @throws me.legrange.haveibeenpwned.HaveIBeenPwndException Thrown if there
-     * is an error.
+     *                                                           is an error.
      */
     public List<Breach> getAllBreachesForAccount(String account) throws HaveIBeenPwndException {
         return getAllBreachesForAccount(account, null, false, false);
@@ -78,17 +82,39 @@ public class HaveIBeenPwndApi {
      * Getting all breaches for an account The most common use of the API is to
      * return a list of all breaches a particular account has been involved in.
      *
-     * @param account The account to search for
-     * @param domain Filters the result set to only breaches against the domain
-     * specified.
-     * @param truncateResponse Returns only the name of the breach.
+     * @param account           The account to search for
+     * @param domain            Filters the result set to only breaches against the domain
+     *                          specified.
+     * @param truncateResponse  Returns only the name of the breach.
      * @param includeUnveridied Returns breaches that have been flagged as
-     * "unverified"
+     *                          "unverified"
      * @return The breaches for the account.
      * @throws HaveIBeenPwndException Thrown if there is an error.
      */
     public List<Breach> getAllBreachesForAccount(String account, String domain, boolean truncateResponse, boolean includeUnveridied) throws HaveIBeenPwndException {
-        return callService(hibpService.getAllBreachesForAccount(account, includeUnveridied, truncateResponse, domain)).orElse(Collections.EMPTY_LIST);
+        return callService(hibpService.getAllBreachesForAccount(apiKey, account, includeUnveridied, truncateResponse, domain)).orElse(Collections.EMPTY_LIST);
+    }
+
+
+    /**
+     * Get all the breaches in the system.
+     *
+     * @return The breaches
+     * @throws HaveIBeenPwndException Thrown if there is an error.
+     */
+    public List<Breach> getAllBreachedSites() throws HaveIBeenPwndException {
+        return getAllBreachedSites(null);
+    }
+
+    /**
+     * Get all the breaches in the system for a given domain
+     *
+     * @param domain The domain to query
+     * @return The breaches
+     * @throws HaveIBeenPwndException Thrown if there is an error.
+     */
+    public List<Breach> getAllBreachedSites(String domain) throws HaveIBeenPwndException {
+        return callService(hibpService.getBreaches(domain)).orElse(Collections.EMPTY_LIST);
     }
 
     /**
@@ -130,7 +156,7 @@ public class HaveIBeenPwndApi {
      * @throws HaveIBeenPwndException Thrown if an error occurs
      */
     public List<Paste> getAllPastesForAccount(String account) throws HaveIBeenPwndException {
-        return callService(hibpService.getAllPastesForAccount(account)).orElse(Collections.EMPTY_LIST);
+        return callService(hibpService.getAllPastesForAccount(apiKey, account)).orElse(Collections.EMPTY_LIST);
     }
 
     /**
@@ -139,7 +165,7 @@ public class HaveIBeenPwndApi {
      * https://haveibeenpwned.com/API/v2
      *
      * @param hash5 The first 5 digits of the sha1 hash
-     * @return The list of hashes partially matching the given hash 
+     * @return The list of hashes partially matching the given hash
      * @throws HaveIBeenPwndException Thrown if an error occurs
      */
     public List<PwnedHash> searchByRange(String hash5) throws HaveIBeenPwndException {
@@ -152,10 +178,11 @@ public class HaveIBeenPwndApi {
         }
         return Collections.EMPTY_LIST;
     }
-    
-    
-    /** Check if a supplied account is pwned. 
-     * 
+
+
+    /**
+     * Check if a supplied account is pwned.
+     *
      * @param account The account to check
      * @return True if the account has been pwned.
      * @throws HaveIBeenPwndException Thrown if an error occurs
@@ -166,7 +193,7 @@ public class HaveIBeenPwndApi {
 
     /**
      * Check if a supplied password is pwned.
-     *
+     * <p>
      * Note that the password is not sent via the network. It is hashed using
      * SHA1, and only the first 5 characters of the hash is sent. Then the hash
      * is compared against the received possibly matching hashes.
@@ -207,7 +234,7 @@ public class HaveIBeenPwndApi {
     /**
      * Call a service and unpack it's result or errors
      *
-     * @param <T> The type of service result
+     * @param <T>  The type of service result
      * @param call The service to call
      * @return The result
      * @throws HaveIBeenPwndException Thrown if an error occurs
@@ -219,12 +246,16 @@ public class HaveIBeenPwndApi {
                 switch (res.code()) {
                     case 400:
                         throw new HaveIBeenPwndException("Bad request — the account does not comply with an acceptable format (i.e. it's an empty string)");
+                    case 401:
+                        throw new HaveIBeenPwndException("Unauthorised — the API key provided was not valid");
                     case 403:
                         throw new HaveIBeenPwndException("Forbidden — no user agent has been specified in the request");
                     case 404:
                         break;
                     case 429:
                         throw new HaveIBeenPwndException("Too many requests — the rate limit has been exceeded");
+                    case 503:
+                        throw new HaveIBeenPwndException("Service unavailable - " + res.errorBody().string());
                     default:
                         throw new HaveIBeenPwndException("Unknown error code " + res.code());
                 }
