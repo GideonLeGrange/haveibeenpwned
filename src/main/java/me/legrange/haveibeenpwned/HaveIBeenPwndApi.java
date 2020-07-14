@@ -3,6 +3,7 @@ package me.legrange.haveibeenpwned;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.IOException;
+import java.net.Proxy;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -35,21 +36,23 @@ public class HaveIBeenPwndApi {
     /**
      * Create a new instance of the API with the given user agent.
      */
-     HaveIBeenPwndApi(String hibpUrl, String ppwUrl, boolean addPadding, String userAgent) {
-        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(chain -> {
-            Request request = chain.request().newBuilder().addHeader("User-Agent", userAgent).build();
-            return chain.proceed(request);
-        }).build();
-        Gson gson = new GsonBuilder()
+     HaveIBeenPwndApi(String hibpUrl, String ppwUrl, boolean addPadding, String userAgent, Proxy proxy) {
+         OkHttpClient.Builder builder = new OkHttpClient.Builder().addInterceptor(chain -> {
+             Request request = chain.request().newBuilder().addHeader("User-Agent", userAgent).build();
+             return chain.proceed(request);
+         });
+         if (proxy != null) {
+             builder = builder.proxy(proxy);
+         }
+         OkHttpClient client = builder.build();
+         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(hibpUrl)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(client)
                 .build();
-
         hibpService = retrofit.create(HaveIBeenPwndService.class);
         retrofit = new Retrofit.Builder()
                 .baseUrl(ppwUrl)

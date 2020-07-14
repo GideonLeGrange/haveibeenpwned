@@ -18,6 +18,7 @@ Version 2.0 brings the following changes:
 * A builder pattern is added in place of the constructor to allow for configuration of the following:
   * The User-Agent (was configured as part of the constructor)
   * If padding (as per above) should be added 
+  * A HTTP proxy with which to do the API calls 
   * The URL to use for pwnd passwords (advanced feature, don't use)
   * The URL to use for breach data (advanced feature, don't use)
 * The builder pattern must be used 
