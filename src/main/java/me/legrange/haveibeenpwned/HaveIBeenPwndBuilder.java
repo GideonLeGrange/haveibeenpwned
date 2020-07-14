@@ -29,6 +29,11 @@ public final class HaveIBeenPwndBuilder {
         return builder;
     }
 
+    /** Add the API key to use.
+     *
+     * @param apiKey
+     * @return
+     */
     public HaveIBeenPwndBuilder withApiKey(String apiKey) {
         this.apiKey = apiKey;
         return this;
