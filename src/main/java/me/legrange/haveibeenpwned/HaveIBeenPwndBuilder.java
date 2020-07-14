@@ -1,5 +1,7 @@
 package me.legrange.haveibeenpwned;
 
+import java.net.Proxy;
+
 /** A builder pattern to setup the HaveIBeenPwndApi the way you want.
  *
  * @author GideonLeGrange
@@ -15,6 +17,7 @@ public final class HaveIBeenPwndBuilder {
     private String haveIbeenPwndUrl  = HIBP_REST_URL;
     private String pwndPasswordsUrl = PPW_REST_URL;
     private String userAgent = DEFAULT_USER_AGENT;
+    private Proxy proxy = null;
 
     /** Create a new builder.
      *
@@ -71,12 +74,22 @@ public final class HaveIBeenPwndBuilder {
         return this;
     }
 
+    /** Add a HTTP proxy to use when connecting to the API.
+     *
+     * @param proxy The proxy to use
+     * @return The builder
+     */
+    public HaveIBeenPwndBuilder withProxy(Proxy proxy) {
+        this.proxy = proxy;
+        return this;
+    }
+
     /** Build the API
      *
      * @return The API
      */
     public HaveIBeenPwndApi build() {
-        return new HaveIBeenPwndApi(haveIbeenPwndUrl, pwndPasswordsUrl, addPadding, userAgent, apiKey);
+        return new HaveIBeenPwndApi(haveIbeenPwndUrl, pwndPasswordsUrl, addPadding, userAgent, apiKey, proxy);
     }
 
     private HaveIBeenPwndBuilder() {

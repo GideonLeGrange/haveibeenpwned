@@ -7,6 +7,10 @@ This API provides an easy way of accessing the account and password verification
 
 [![Build Status](https://travis-ci.org/GideonLeGrange/haveibeenpwned.svg?branch=master)](https://travis-ci.org/GideonLeGrange/haveibeenpwned)
 
+**Version 3.0, which supports v3 of the haveibeenpwned is nearly done**
+
+Version 3 can be checked out using the version3 branch. It brings in support for using an API key as per [this documentation](https://haveibeenpwned.com/API/v3)
+
 **The current version is 2.0**
 
 Version 2.0 brings the following changes: 
@@ -14,9 +18,13 @@ Version 2.0 brings the following changes:
 * A builder pattern is added in place of the constructor to allow for configuration of the following:
   * The User-Agent (was configured as part of the constructor)
   * If padding (as per above) should be added 
+  * A HTTP proxy with which to do the API calls 
   * The URL to use for pwnd passwords (advanced feature, don't use)
   * The URL to use for breach data (advanced feature, don't use)
 * The builder pattern must be used 
+
+**Version 1.1 is still avaialble for download from GitHub and in Maven Central**
+
   
 # Getting the API
 
