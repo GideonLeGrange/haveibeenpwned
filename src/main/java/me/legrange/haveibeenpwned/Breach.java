@@ -11,10 +11,10 @@ import java.util.List;
  */
 public final class Breach {
 
-    @SerializedName("Title")
-    private String title;
     @SerializedName("Name")
     private String name;
+    @SerializedName("Title")
+    private String title;
     @SerializedName("Domain")
     private String domain;
     @SerializedName("BreachDate")
@@ -39,14 +39,8 @@ public final class Breach {
     private boolean isRetired;
     @SerializedName("IsSpamList")
     private boolean isSpamList;
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    @SerializedName("LogoPath")
+    private String logoPath;
 
     public String getName() {
         return name;
@@ -54,6 +48,14 @@ public final class Breach {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDomain() {
@@ -112,50 +114,72 @@ public final class Breach {
         this.dataClasses = dataClasses;
     }
 
-    public boolean isIsVerified() {
+    public boolean isVerified() {
         return isVerified;
     }
 
-    public void setIsVerified(boolean isVerified) {
-        this.isVerified = isVerified;
+    public void setVerified(boolean verified) {
+        isVerified = verified;
     }
 
-    public boolean isIsFabricated() {
+    public boolean isFabricated() {
         return isFabricated;
     }
 
-    public void setIsFabricated(boolean isFabricated) {
-        this.isFabricated = isFabricated;
+    public void setFabricated(boolean fabricated) {
+        isFabricated = fabricated;
     }
 
-    public boolean isIsSensitive() {
+    public boolean isSensitive() {
         return isSensitive;
     }
 
-    public void setIsSensitive(boolean isSensitive) {
-        this.isSensitive = isSensitive;
+    public void setSensitive(boolean sensitive) {
+        isSensitive = sensitive;
     }
 
-    public boolean isIsRetired() {
+    public boolean isRetired() {
         return isRetired;
     }
 
-    public void setIsRetired(boolean isRetired) {
-        this.isRetired = isRetired;
+    public void setRetired(boolean retired) {
+        isRetired = retired;
     }
 
-    public boolean isIsSpamList() {
+    public boolean isSpamList() {
         return isSpamList;
     }
 
-    public void setIsSpamList(boolean isSpamList) {
-        this.isSpamList = isSpamList;
+    public void setSpamList(boolean spamList) {
+        isSpamList = spamList;
+    }
+
+    public String getLogoPath() {
+        return logoPath;
+    }
+
+    public void setLogoPath(String logoPath) {
+        this.logoPath = logoPath;
     }
 
     @Override
     public String toString() {
-        return "Breach{" + "title=" + title + ", name=" + name + ", domain=" + domain + ", breachDate=" + breachDate + ", addedDate=" + addedDate + ", modifiedDate=" + modifiedDate + ", pwnCount=" + pwnCount + ", description=" + description + ", dataClasses=" + dataClasses + ", isVerified=" + isVerified + ", isFabricated=" + isFabricated + ", isSensitive=" + isSensitive + ", isRetired=" + isRetired + ", isSpamList=" + isSpamList + '}';
+        return "Breach{" +
+                "name='" + name + '\'' +
+                ", title='" + title + '\'' +
+                ", domain='" + domain + '\'' +
+                ", breachDate=" + breachDate +
+                ", addedDate=" + addedDate +
+                ", modifiedDate=" + modifiedDate +
+                ", pwnCount=" + pwnCount +
+                ", description='" + description + '\'' +
+                ", dataClasses=" + dataClasses +
+                ", isVerified=" + isVerified +
+                ", isFabricated=" + isFabricated +
+                ", isSensitive=" + isSensitive +
+                ", isRetired=" + isRetired +
+                ", isSpamList=" + isSpamList +
+                ", logoPath='" + logoPath + '\'' +
+                '}';
     }
-
-
 }
