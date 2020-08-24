@@ -5,7 +5,7 @@ This API provides an easy way of accessing the account and password verification
 
 # Versions
 
-
+![Java CI with Maven](https://github.com/GideonLeGrange/haveibeenpwned/workflows/Java%20CI%20with%20Maven/badge.svg)
 
 It brings in support for using an API key as per [this documentation](https://haveibeenpwned.com/API/v3)
 
