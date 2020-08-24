@@ -5,7 +5,7 @@ This API provides an easy way of accessing the account and password verification
 
 # Versions
 
-[![Build Status](https://travis-ci.org/GideonLeGrange/haveibeenpwned.svg?branch=master)](https://travis-ci.org/GideonLeGrange/haveibeenpwned)
+
 
 It brings in support for using an API key as per [this documentation](https://haveibeenpwned.com/API/v3)
 
