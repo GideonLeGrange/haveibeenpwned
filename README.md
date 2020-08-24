@@ -7,11 +7,13 @@ This API provides an easy way of accessing the account and password verification
 
 [![Build Status](https://travis-ci.org/GideonLeGrange/haveibeenpwned.svg?branch=master)](https://travis-ci.org/GideonLeGrange/haveibeenpwned)
 
-**Version 3.0, which supports v3 of the haveibeenpwned is nearly done**
+It brings in support for using an API key as per [this documentation](https://haveibeenpwned.com/API/v3)
 
-Version 3 can be checked out using the version3 branch. It brings in support for using an API key as per [this documentation](https://haveibeenpwned.com/API/v3)
+**The current version is 3.0**
 
-**The current version is 2.0**
+It brings in support for using an API key as per [this documentation](https://haveibeenpwned.com/API/v3)
+
+**Version 2.0 is still avaialble for download from GitHub and in Maven Central **
 
 Version 2.0 brings the following changes: 
 * The API supports padding for pwnd passwords (see https://www.troyhunt.com/enhancing-pwned-passwords-privacy-with-padding/)
