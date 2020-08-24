@@ -21,6 +21,7 @@ public final class HaveIBeenPwndBuilder {
 
     /** Create a new builder.
      *
+     * @param userAgent The user agent to use when connecting
      * @return The builder
      */
     public static HaveIBeenPwndBuilder create(String userAgent) {
@@ -31,8 +32,8 @@ public final class HaveIBeenPwndBuilder {
 
     /** Add the API key to use.
      *
-     * @param apiKey
-     * @return
+     * @param apiKey API key to use
+     * @return The builder
      */
     public HaveIBeenPwndBuilder withApiKey(String apiKey) {
         this.apiKey = apiKey;
