@@ -36,7 +36,7 @@ Maven users can use the artifact from Maven Central with this dependency:
 <dependency>
   <groupId>me.legrange</groupId>
   <artifactId>haveibeenpwned</artifactId>
-  <version>2.0</version>
+  <version>3.0</version>
 </dependency>
 ```
 
