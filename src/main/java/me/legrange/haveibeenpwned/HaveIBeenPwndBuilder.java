@@ -19,6 +19,15 @@ public final class HaveIBeenPwndBuilder {
     private String userAgent = DEFAULT_USER_AGENT;
     private Proxy proxy = null;
 
+
+    /** Create a new builder with default user agent.
+     *
+     * @return The builder
+     */
+    public static HaveIBeenPwndBuilder create() {
+        return create(DEFAULT_USER_AGENT);
+    }
+
     /** Create a new builder.
      *
      * @param userAgent The user agent to use when connecting

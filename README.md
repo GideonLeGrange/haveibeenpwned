@@ -13,7 +13,7 @@ It brings in support for using an API key as per [this documentation](https://ha
 
 It brings in support for using an API key as per [this documentation](https://haveibeenpwned.com/API/v3)
 
-**Version 2.0 is still avaialble for download from GitHub and in Maven Central**
+**Version 2.0 is still available for download from GitHub and in Maven Central**
 
 Version 2.0 brings the following changes: 
 * The API supports padding for pwnd passwords (see https://www.troyhunt.com/enhancing-pwned-passwords-privacy-with-padding/)
@@ -25,7 +25,7 @@ Version 2.0 brings the following changes:
   * The URL to use for breach data (advanced feature, don't use)
 * The builder pattern must be used 
 
-**Version 1.1 is still avaialble for download from GitHub and in Maven Central**
+**Version 1.1 is still available for download from GitHub and in Maven Central**
 
   
 # Getting the API
