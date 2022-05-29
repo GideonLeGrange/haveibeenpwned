@@ -10,13 +10,12 @@ public final class HaveIBeenPwndBuilder {
 
     private static final String HIBP_REST_URL = "https://haveibeenpwned.com/api/v3/";
     private static final String PPW_REST_URL = "https://api.pwnedpasswords.com/";
-    private static final String DEFAULT_USER_AGENT = "HaveIBeenPwndJava-v1";
 
     private boolean addPadding = false;
     private String apiKey = "";
     private String haveIbeenPwndUrl  = HIBP_REST_URL;
     private String pwndPasswordsUrl = PPW_REST_URL;
-    private String userAgent = DEFAULT_USER_AGENT;
+    private String userAgent;
     private Proxy proxy = null;
 
     /** Create a new builder.
@@ -60,11 +59,12 @@ public final class HaveIBeenPwndBuilder {
         return this;
     }
 
-    /** Change the User-Agent to send with an HTTP request from the default
-     *
-     * @param userAgent The URL to use
-     * @return The builder
+    /**
+     * This is deprecated and left for backwards compatibility. Since specifying the
+     * User-Agent is required, the right way to use the builder is to pass it to
+     * create(). See the README for more information.
      */
+    @Deprecated()
     public HaveIBeenPwndBuilder withUserAgent(String userAgent) {
         this.userAgent = userAgent;
         return this;
@@ -99,7 +99,6 @@ public final class HaveIBeenPwndBuilder {
     }
 
     private HaveIBeenPwndBuilder() {
-
     }
 
 }
