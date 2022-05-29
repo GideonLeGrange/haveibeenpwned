@@ -50,5 +50,5 @@ service.properties
 
 .DS_Store
 
-# KML ggenerated
-gen/
+# mvn 
+pom.xml.versionsBackup

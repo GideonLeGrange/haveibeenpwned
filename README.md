@@ -45,7 +45,7 @@ You can also download the pre-built jar file, or a zip or tar.gz file with the s
 
 # Using the API
 
-The purpose of the API see if an account (email address) or password has been listed as compromised on [';--have i been pwned?](https://haveibeenpwned.com)
+The purpose of the API is to see if an account (email address) or password has been listed as compromised on [';--have i been pwned?](https://haveibeenpwned.com)
 To use the API you need to instantiate an instance of it, and then call one of the methods. I can't be (much) simpler:
 
 ```java
@@ -54,7 +54,7 @@ HaveIBeenPwndApi hibp = HaveIBeenPwndBuilder().create("Your-User-Agent").build()
 
 But if you wish to configure the API, `HaveIBeenPwnedBuilder` allows you to set if you wish to add padding to
 pwnd password checks [see this blog for details](https://www.troyhunt.com/enhancing-pwned-passwords-privacy-with-padding/),
-and it allows you to change the pwnd password and breach URLs to use (for testing, don't do this). You van 
+and it allows you to change the pwnd password and breach URLs to use (for testing, don't do this). You can 
 also set HTTP Proxy to use. 
 
 For example, here we enable padding:
@@ -67,12 +67,14 @@ For example, here we enable padding:
 
 ## Specifying the User-Agent 
 
-The API forces the user to specify their User-Agent. While I originally had a default User-Agent in the library, 
-the `';--have i been pwned?`website states the following:
+The API requires the user to specify their User-Agent on creation. While I originally had a default User-Agent 
+in the library, the `';--have i been pwned?`website states the following:
 
->The user agent should accurately describe the nature of the API consumer such that it can be clearly identified in the request. Not doing so may result in the request being blocked.
+>The user agent should accurately describe the nature of the API consumer such that it can be clearly 
+>identified in the request. Not doing so may result in the request being blocked.
 
-Therefore, `HaveIBeenPwnedBuilder` forces the user to pass a User-Agent string in the `create()` call.
+Therefore, `HaveIBeenPwnedBuilder` forces the user to pass a User-Agent string in the `create()` call to
+distinguish their application from others. 
 
 ## Examples 
 
