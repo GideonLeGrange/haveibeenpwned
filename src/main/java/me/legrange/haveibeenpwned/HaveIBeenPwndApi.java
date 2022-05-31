@@ -25,7 +25,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
  * API to access https://haveibeenpwned.com/.
  * <p>
  * This API implements the specification found here:
- * https://haveibeenpwned.com/API/v2
+ * <a href="https://haveibeenpwned.com/API/v3">API docs</a>
  *
  * @author GideonLeGrange
  */
@@ -39,15 +39,22 @@ public class HaveIBeenPwndApi {
     /**
      * Create a new instance of the API with the given user agent.
      */
-     HaveIBeenPwndApi(String hibpUrl, String ppwUrl, boolean addPadding, String userAgent, String apiKey, Proxy proxy) {
-         OkHttpClient.Builder builder = new OkHttpClient.Builder().addInterceptor(chain -> {
+     HaveIBeenPwndApi(String hibpUrl, String ppwUrl, boolean addPadding, String userAgent, String apiKey, Proxy proxy, OkHttpClient.Builder builder) {
+         OkHttpClient.Builder apiBuilder;
+         if (builder != null) {
+             apiBuilder = builder;
+         } else {
+             apiBuilder = new OkHttpClient.Builder();
+         }
+
+         apiBuilder.addInterceptor(chain -> {
              Request request = chain.request().newBuilder().addHeader("User-Agent", userAgent).build();
              return chain.proceed(request);
          });
          if (proxy != null) {
-             builder = builder.proxy(proxy);
+             apiBuilder = apiBuilder.proxy(proxy);
          }
-         OkHttpClient client = builder.build();
+         OkHttpClient client = apiBuilder.build();
          Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
@@ -165,7 +172,7 @@ public class HaveIBeenPwndApi {
     /**
      * Search pwned passwords for the given password. To understand how to use
      * this, read the 'Searching by range' section in
-     * https://haveibeenpwned.com/API/v2
+     * <a href="https://haveibeenpwned.com/API/v3#SearchingPwnedPasswordsByRange">API docs</a>
      *
      * @param hash5 The first 5 digits of the sha1 hash
      * @return The list of hashes partially matching the given hash

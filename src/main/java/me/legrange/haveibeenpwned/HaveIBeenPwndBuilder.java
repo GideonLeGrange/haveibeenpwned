@@ -2,6 +2,8 @@ package me.legrange.haveibeenpwned;
 
 import java.net.Proxy;
 
+import okhttp3.OkHttpClient;
+
 /** A builder pattern to setup the HaveIBeenPwndApi the way you want.
  *
  * @author GideonLeGrange
@@ -17,6 +19,7 @@ public final class HaveIBeenPwndBuilder {
     private String pwndPasswordsUrl = PPW_REST_URL;
     private String userAgent;
     private Proxy proxy = null;
+    private OkHttpClient.Builder okHttpClientBuilder;
 
     /** Create a new builder.
      *
@@ -90,12 +93,22 @@ public final class HaveIBeenPwndBuilder {
         return this;
     }
 
+    /** Add a OkHttpClient builder to use when connecting to the API.
+     *
+     * @param okHttpClientBuilder the OkHttpClient builder to use
+     * @return The builder
+     */
+    public HaveIBeenPwndBuilder withOkHttpClientBuilder(OkHttpClient.Builder okHttpClientBuilder ) {
+        this.okHttpClientBuilder = okHttpClientBuilder;
+        return this;
+    }
+
     /** Build the API
      *
      * @return The API
      */
     public HaveIBeenPwndApi build() {
-        return new HaveIBeenPwndApi(haveIbeenPwndUrl, pwndPasswordsUrl, addPadding, userAgent, apiKey, proxy);
+        return new HaveIBeenPwndApi(haveIbeenPwndUrl, pwndPasswordsUrl, addPadding, userAgent, apiKey, proxy, okHttpClientBuilder);
     }
 
     private HaveIBeenPwndBuilder() {
